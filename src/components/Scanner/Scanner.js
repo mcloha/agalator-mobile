@@ -1,5 +1,5 @@
-import { Alert, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
 
@@ -10,14 +10,14 @@ const Scanner = () => {
 
     useEffect(() => {
         getItemByItemCode();
-    }, [barCode]);
+    }, [getItemByItemCode, barCode]);
 
     const handleBarCodeRead = ({ data }) => {
         if (barCode !== data) {
             setBarCode(data);
         }
     };
-    const getItemByItemCode = async () => {
+    const getItemByItemCode = useCallback(async () => {
         try {
             const { data } = await axios.get(`/products/items/item/${barCode}`);
             console.log(data);
@@ -32,9 +32,10 @@ const Scanner = () => {
             }, 3000);
             return {};
         }
-    };
+    }, [barCode]);
+
     return (
-        <View style={{ flex: 1 }}>
+        <View>
             <RNCamera
                 defaultTouchToFocus
                 flashMode={'auto'}
@@ -45,10 +46,16 @@ const Scanner = () => {
                     title: 'Permission to use camera',
                     message: 'We need your permission to use your camera phone',
                 }}
-                style={{ flex: 1 }}
+                style={styles.camera}
             />
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    camera: {
+        flex: 1,
+    },
+});
 
 export default Scanner;

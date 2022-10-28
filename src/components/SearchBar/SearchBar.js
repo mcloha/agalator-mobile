@@ -1,8 +1,9 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TextInput, IconButton } from '@react-native-material/core';
+import { InputText } from '../InputText';
 import { BarCode } from '../../assets/icons';
+import styled from 'styled-components/native';
 
 const ScanButton = ({ props }) => {
     const navigation = useNavigation();
@@ -22,17 +23,11 @@ const SearchBar = () => {
     const [searchBarValue, setSearchBarValue] = useState('');
     return (
         <View style={styles.searchBarRoot}>
-            <TextInput
+            <InputText
                 placeholder="Search..."
                 variant="outlined"
                 value={searchBarValue}
                 onChangeText={setSearchBarValue}
-                trailing={props => (
-                    <IconButton
-                        icon={props => <ScanButton {...props} />}
-                        {...props}
-                    />
-                )}
             />
         </View>
     );

@@ -1,37 +1,34 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-    ThemeProvider,
-    defaultTheme,
-    darkTheme,
-} from '@react-native-material/core';
+import styled, { ThemeProvider } from 'styled-components/native';
 import { SearchBar, Scanner } from './src/components';
 
 const Stack = createNativeStackNavigator();
 
+const StyledRoot = styled.View`
+    flex: 1;
+    padding: 10px;
+    background: ${props => props.theme.background};
+`;
+
 const Root = () => (
-    <View style={styles.root}>
+    <StyledRoot>
         <SearchBar />
-    </View>
+    </StyledRoot>
 );
 
-const themes = {
-    light: {
-        name: 'light',
-        palette: {
-            default: 'rgba(100, 100, 100, .5)',
-            primary: '#40A3D0',
-            secondary: '#F5FF62',
-        },
-    },
-    dark: {},
+const mainTheme = {
+    primary: '#25316D',
+    secondary: '#5DA7DB',
+    additional: '#BCCEF8',
+    disbled: '#CDFCF6',
+    background: '#FAF7F0',
 };
 
 const App = () => {
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={mainTheme}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen
@@ -47,14 +44,5 @@ const App = () => {
         </ThemeProvider>
     );
 };
-
-const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10,
-    },
-});
 
 export default App;
