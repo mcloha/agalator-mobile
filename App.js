@@ -1,22 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import styled, { ThemeProvider } from 'styled-components/native';
-import { SearchBar, Scanner } from './src/components';
+import { ThemeProvider } from 'styled-components/native';
+import { Cart, Scanner } from './src/pages';
 
 const Stack = createNativeStackNavigator();
-
-const StyledRoot = styled.View`
-    flex: 1;
-    padding: 10px;
-    background: ${props => props.theme.background};
-`;
-
-const Root = () => (
-    <StyledRoot>
-        <SearchBar />
-    </StyledRoot>
-);
 
 const mainTheme = {
     primary: '#25316D',
@@ -32,10 +20,10 @@ const App = () => {
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen
-                        name="Home"
-                        component={Root}
+                        name="Cart"
+                        component={Cart}
                         options={{
-                            title: 'Agalator',
+                            title: 'Cart',
                         }}
                     />
                     <Stack.Screen name="Scanner" component={Scanner} />

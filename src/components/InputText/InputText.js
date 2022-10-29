@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, TextInput } from 'react-native';
 import styled from 'styled-components/native';
-import { BarCode } from '../../assets/icons';
+import { IconButton } from '../IconButton';
+import { Icon } from '../Icon';
 
 const InputTextRoot = styled.View`
     flex-direction: row;
@@ -21,29 +21,29 @@ const StyledTextInput = styled.TextInput`
     color: ${props => props.theme.primary};
 `;
 
-const IconButton = styled.TouchableOpacity`
-    flex: 1;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-`;
-
-const StyledBarCode = styled(BarCode)`
-    color: ${props => props.theme.primary};
-`;
-
-const InputText = ({ value, onChangeText }) => {
+const InputText = ({
+    value,
+    onChangeText,
+    placeholder,
+    leftIconSVG,
+    rightIconSVG,
+    onLeftIconPress,
+    onRightIconPress,
+}) => {
     return (
         <InputTextRoot>
+            {leftIconSVG && (
+                <IconButton svg={leftIconSVG} onPress={onLeftIconPress} />
+            )}
             <StyledTextInput
-                placeholder="Search..."
+                placeholder={placeholder}
                 variant="outlined"
                 value={value}
                 onChangeText={onChangeText}
             />
-            <IconButton>
-                <StyledBarCode />
-            </IconButton>
+            {rightIconSVG && (
+                <IconButton svg={rightIconSVG} onPress={onRightIconPress} />
+            )}
         </InputTextRoot>
     );
 };

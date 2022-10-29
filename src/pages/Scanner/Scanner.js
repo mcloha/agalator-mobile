@@ -1,11 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import styled from 'styled-components/native';
 
 axios.defaults.baseURL = 'http://188.166.195.191';
 
+const Root = styled.View`
+    flex: 1;
+    padding: 10px;
+    background: ${props => props.theme.background};
+`;
+
+const BarCodeScanner = styled(RNCamera)`
+    flex: 1;
+`;
+
 const Scanner = () => {
+    const navigation = useNavigation();
+
     const [barCode, setBarCode] = useState('');
 
     useEffect(() => {
@@ -13,30 +26,38 @@ const Scanner = () => {
     }, [getItemByItemCode, barCode]);
 
     const handleBarCodeRead = ({ data }) => {
-        if (barCode !== data) {
+        if (data && barCode !== data) {
             setBarCode(data);
         }
     };
     const getItemByItemCode = useCallback(async () => {
         try {
-            const { data } = await axios.get(`/products/items/item/${barCode}`);
-            console.log(data);
-            Alert.alert(data.name, '', [
-                { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-            return data;
+            if (!barCode) {
+                return;
+            }
+            const { data: item } = await axios.get(
+                `/products/items/item/${barCode}`,
+            );
+            const { data: product } = await axios.get(
+                `/products/${item.itemId}`,
+            );
+            navigation.navigate({
+                name: 'Cart',
+                params: {
+                    data: product,
+                },
+            });
         } catch (error) {
             console.log(error);
-            setTimeout(() => {
-                setBarCode('');
-            }, 3000);
-            return {};
+            navigation.navigate({
+                name: 'Cart',
+            });
         }
     }, [barCode]);
 
     return (
-        <View>
-            <RNCamera
+        <Root>
+            <BarCodeScanner
                 defaultTouchToFocus
                 flashMode={'auto'}
                 mirrorImage={false}
@@ -46,16 +67,9 @@ const Scanner = () => {
                     title: 'Permission to use camera',
                     message: 'We need your permission to use your camera phone',
                 }}
-                style={styles.camera}
             />
-        </View>
+        </Root>
     );
 };
-
-const styles = StyleSheet.create({
-    camera: {
-        flex: 1,
-    },
-});
 
 export default Scanner;
