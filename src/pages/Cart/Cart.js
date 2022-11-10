@@ -28,7 +28,9 @@ const ItemSeperator = styled.View`
     height: 10px;
 `;
 
-const Cart = ({ route }) => {
+const Cart = props => {
+    console.log(props);
+    const { route } = props;
     const [products, setProducts] = useState([]);
 
     const { data } = route?.params || {};
